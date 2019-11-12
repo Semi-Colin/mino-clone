@@ -1,4 +1,4 @@
-package tetris;
+package minoclone;
 
 import apcs.Window;
 
@@ -10,6 +10,9 @@ public class Main {
 		int width = 800;
 		int height = 800;
 		int gravity = 10;
+		int das = 1;
+		int arr = 3;
+		int frames_held = 0;
 		int frame = 0;
 		
 		
@@ -41,11 +44,22 @@ public class Main {
 				}
 			}
 			
+			if(Window.key.released("right") && Window.key.released("left")) {
+				frames_held = 0;
+			}
+			
 			if(Window.key.pressed("right") && bob.x < 9 && matrix[bob.x+1][bob.y] == 0) {
-				bob.Move(1, 0);
+				frames_held++;
+				System.out.println(frames_held);
+				if(frames_held >= arr && frames_held%das == 0) {
+					bob.Move(1,0);
+				}
 			}
 			if(Window.key.pressed("left") && bob.x > 0 && matrix[bob.x-1][bob.y] == 0) {
-				bob.Move(-1, 0);
+				frames_held++;
+				if(frames_held >= arr && frames_held%das == 0) {
+					bob.Move(-1, 0);
+				}
 		}
 			
 			if(Window.key.pressed("space")) {
