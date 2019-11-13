@@ -5,18 +5,22 @@ import apcs.Window;
 public class Main {
 	
 	static int[][] matrix = new int[10][20];
+	
+	static int width = 800;
+	static int height = 800;
+	static int gravity = 10;
+	static int das = 1;
+	static int arr = 3;
+	static int frames_held = 0;
+	static boolean space_held = false;
+	static int frame = 0;
+	
+	static Mino bob;
 
 	public static void main(String[] args) {
-		int width = 800;
-		int height = 800;
-		int gravity = 10;
-		int das = 1;
-		int arr = 3;
-		int frames_held = 0;
-		int frame = 0;
 		
 		
-		Mino bob = new Mino();
+		bob = new Mino();
 		
 		Window.size(width, height);
 		Window.setFrameRate(60);
@@ -24,51 +28,7 @@ public class Main {
 		while(true) {
 			Window.frame();
 			frame++;
-			for(int x=0;x<11;x++) {
-				Window.out.line(20+x*20,20,20+x*20,420);
-				
-			}
-			for(int y=0;y<21;y++) {
-				Window.out.line(20,20+y*20,220,20+y*20);
-			}
-			
-			if(frame>=gravity || Window.key.pressed("down")) {
-				frame = 0;
-				if(bob.y < 19 && matrix[bob.x][bob.y+1] == 0) {
-					bob.Move(0, 1);
-				} else{
-					Lock(bob.x,bob.y);
-					Window.sleep(250);
-					bob.x=4;
-					bob.y=0;
-				}
-			}
-			
-			if(Window.key.released("right") && Window.key.released("left")) {
-				frames_held = 0;
-			}
-			
-			if(Window.key.pressed("right") && bob.x < 9 && matrix[bob.x+1][bob.y] == 0) {
-				frames_held++;
-				System.out.println(frames_held);
-				if(frames_held >= arr && frames_held%das == 0) {
-					bob.Move(1,0);
-				}
-			}
-			if(Window.key.pressed("left") && bob.x > 0 && matrix[bob.x-1][bob.y] == 0) {
-				frames_held++;
-				if(frames_held >= arr && frames_held%das == 0) {
-					bob.Move(-1, 0);
-				}
-		}
-			
-			if(Window.key.pressed("space")) {
-				Harddrop(bob.x,bob.y);
-				Window.sleep(250);
-				bob.x=4;
-				bob.y=0;
-			}
-			
+			checkMovementKeys();
 			
 			bob.Draw();
 			DisplayMatrix();
@@ -79,6 +39,57 @@ public class Main {
 	
 	public static void Lock(int x, int y) {
 		matrix[x][y] = 1;
+	}
+	
+	public static void checkMovementKeys() {
+		for(int x=0;x<11;x++) {
+			Window.out.line(20+x*20,20,20+x*20,420);
+			
+		}
+		for(int y=0;y<21;y++) {
+			Window.out.line(20,20+y*20,220,20+y*20);
+		}
+		
+		if(frame>=gravity || Window.key.pressed("down")) {
+			frame = 0;
+			if(bob.y < 19 && matrix[bob.x][bob.y+1] == 0) {
+				bob.Move(0, 1);
+			} else{
+				Lock(bob.x,bob.y);
+				bob.x=4;
+				bob.y=0;
+			}
+		}
+		
+		if(Window.key.released("right") && Window.key.released("left")) {
+			frames_held = 0;
+		}
+		
+		if(Window.key.pressed("right") && bob.x < 9 && matrix[bob.x+1][bob.y] == 0) {
+			frames_held++;
+			System.out.println(frames_held);
+			if(frames_held >= arr && frames_held%das == 0) {
+				bob.Move(1,0);
+			}
+		}
+		
+		if(Window.key.pressed("left") && bob.x > 0 && matrix[bob.x-1][bob.y] == 0) {
+			frames_held++;
+			if(frames_held >= arr && frames_held%das == 0) {
+				bob.Move(-1, 0);
+			}
+		}
+		
+		if(Window.key.released("space")) {
+			space_held = false;
+		}
+		
+		if(Window.key.pressed("space") && space_held == false) {
+			space_held = true;
+			Harddrop(bob.x,bob.y);
+			bob.x=4;
+			bob.y=0;
+		}
 	}
 	
 	public static void DisplayMatrix() {
