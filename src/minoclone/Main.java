@@ -9,8 +9,8 @@ public class Main {
 	static int width = 800;
 	static int height = 800;
 	static int gravity = 10;
-	static int das = 1;
-	static int arr = 3;
+	static int das = 2;
+	static int arr = 1;
 	static int frames_held = 0;
 	static boolean space_held = false;
 	static int frame = 0;
@@ -68,14 +68,14 @@ public class Main {
 		if(Window.key.pressed("right") && bob.x < 9 && matrix[bob.x+1][bob.y] == 0) {
 			frames_held++;
 			System.out.println(frames_held);
-			if(frames_held >= arr && frames_held%das == 0) {
+			if(frames_held >= das && frames_held%arr == 0) {
 				bob.Move(1,0);
 			}
 		}
 		
 		if(Window.key.pressed("left") && bob.x > 0 && matrix[bob.x-1][bob.y] == 0) {
 			frames_held++;
-			if(frames_held >= arr && frames_held%das == 0) {
+			if(frames_held >= das && frames_held%arr == 0) {
 				bob.Move(-1, 0);
 			}
 		}
